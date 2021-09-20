@@ -10,9 +10,50 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2021_09_20_081011) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "countries", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "election_results", force: :cascade do |t|
+    t.bigint "election_id", null: false
+    t.bigint "party_id", null: false
+    t.integer "votes"
+    t.integer "seats"
+    t.float "votes_percent_diff"
+    t.integer "seats_diff"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["election_id"], name: "index_election_results_on_election_id"
+    t.index ["party_id"], name: "index_election_results_on_party_id"
+  end
+
+  create_table "elections", force: :cascade do |t|
+    t.string "name"
+    t.date "date"
+    t.bigint "country_id", null: false
+    t.boolean "has_seats"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["country_id"], name: "index_elections_on_country_id"
+  end
+
+  create_table "parties", force: :cascade do |t|
+    t.string "name"
+    t.bigint "country_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["country_id"], name: "index_parties_on_country_id"
+  end
+
+  add_foreign_key "election_results", "elections"
+  add_foreign_key "election_results", "parties"
+  add_foreign_key "elections", "countries"
+  add_foreign_key "parties", "countries"
 end
