@@ -118,6 +118,7 @@ GEM
     nokogiri (1.12.4)
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
+    open-uri (0.1.0)
     parallel (1.20.1)
     parser (3.0.2.0)
       ast (~> 2.4.1)
@@ -266,6 +267,8 @@ DEPENDENCIES
   factory_bot_rails
   jbuilder (~> 2.7)
   listen (~> 3.3)
+  nokogiri
+  open-uri
   pg (~> 1.1)
   puma (~> 5.0)
   rack-mini-profiler (~> 2.0)
