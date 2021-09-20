@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :party do
-    name { "MyString" }
-    country { nil }
+    sequence(:name) { |n| "Party_#{n}" }
+    country
   end
 end

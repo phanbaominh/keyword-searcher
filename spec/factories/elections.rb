@@ -2,9 +2,9 @@
 
 FactoryBot.define do
   factory :election do
-    name { "MyString" }
+    sequence(:name) { |n| "Election_#{n}" }
     date { "2021-09-20" }
-    country { nil }
+    country
     has_seats { false }
   end
 end

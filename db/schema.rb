@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_20_081011) do
+ActiveRecord::Schema.define(version: 2021_09_20_121612) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 2021_09_20_081011) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["election_id"], name: "index_election_results_on_election_id"
+    t.index ["party_id", "election_id"], name: "index_election_results_on_party_id_and_election_id", unique: true
     t.index ["party_id"], name: "index_election_results_on_party_id"
   end
 
