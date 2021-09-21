@@ -20,6 +20,47 @@ RSpec.describe ElectionResult, type: :model do
       expect(described_class.of_election(first_election)).to contain_exactly(*results)
     end
   end
+
+  describe ".of" do
+    before(:context) do
+      @queried_election_name = "Query Election"
+      @queried_party_name = "Query Party"
+      @queried_country_name = "Query Country"
+      country_1 = create(:country, name: @queried_country_name)
+      country_2 = create(:country)
+      election_1 = create(:election, country: country_1, name: @queried_election_name)
+      election_2 = create(:election, country: country_1)
+      election_3 = create(:election, country: country_2, name: @queried_election_name)
+      party_1 = create(:party, country: country_1, name: @queried_party_name)
+      party_2 = create(:party, country: country_1)
+      party_3 = create(:party, country: country_2)
+      @result_1 = create(:election_result, party: party_1, election: election_1)
+      @result_2 = create(:election_result, party: party_2, election: election_1)
+      @result_3 = create(:election_result, party: party_1, election: election_2)
+      @result_4 = create(:election_result, party: party_3, election: election_3)
+    end
+    # { elections: {election:, result:}, parties: {party:, result:}}
+    it "return election results with queried election name" do
+      expect(described_class.of({ election: { name: @queried_election_name } }))
+        .to contain_exactly(@result_1, @result_4)
+    end
+    it "return election results with queried party name" do
+      expect(described_class.of({ party: { name: @queried_party_name } }))
+        .to contain_exactly(@result_1, @result_3)
+    end
+    it "return election results with queried country name" do
+      expect(described_class.of({ country: { name: @queried_country_name } }))
+        .to contain_exactly(@result_1, @result_2, @result_3)
+    end
+    it "return election results with queried country, election, party name" do
+      expect(described_class.of({
+                                  country: { name: @queried_country_name },
+                                  election: { name: @queried_election_name },
+                                  party: { name: @queried_party_name }
+                                }))
+        .to contain_exactly(@result_1)
+    end
+  end
   # specify "A party should only have one result per election" do
   #   election = create(:election)
   #   party = create(:party)

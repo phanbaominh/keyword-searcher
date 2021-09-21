@@ -8,4 +8,12 @@ class ElectionResult < ApplicationRecord
   validates :party, uniqueness: { scope: :election_id, message: "should have only one result per election" }
 
   scope :of_election, ->(election) { where(election: election) }
+
+  def self.of(options)
+    # query = self
+    # election, country, party = options.values_at(:election, :country, :party)
+    # if country
+    #   self.joins()
+    # end
+  end
 end
