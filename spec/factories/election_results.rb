@@ -2,6 +2,7 @@
 
 FactoryBot.define do
   factory :election_result do
+    country
     election
     party
     votes { 1 }

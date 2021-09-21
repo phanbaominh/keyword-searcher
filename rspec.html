@@ -1,0 +1,80 @@
+**...FFFF**.*
+
+Pending: (Failures listed here are expected and do not affect your suite's status)
+
+  1) ElectionResultsHelper add some examples to (or delete) /home/minh/projects/election-tracker/spec/helpers/election_results_helper_spec.rb
+     # Not yet implemented
+     # ./spec/helpers/election_results_helper_spec.rb:16
+
+  2) Country add some examples to (or delete) /home/minh/projects/election-tracker/spec/models/country_spec.rb
+     # Not yet implemented
+     # ./spec/models/country_spec.rb:6
+
+  3) Election add some examples to (or delete) /home/minh/projects/election-tracker/spec/models/election_spec.rb
+     # Not yet implemented
+     # ./spec/models/election_spec.rb:6
+
+  4) Party add some examples to (or delete) /home/minh/projects/election-tracker/spec/models/party_spec.rb
+     # Not yet implemented
+     # ./spec/models/party_spec.rb:6
+
+  5) election_results/index.html.erb add some examples to (or delete) /home/minh/projects/election-tracker/spec/views/election_results/index.html.erb_spec.rb
+     # Not yet implemented
+     # ./spec/views/election_results/index.html.erb_spec.rb:6
+
+Failures:
+
+  1) ElectionResult.of return election results with queried election name
+     Failure/Error:
+       expect(described_class.of({ election: { name: @queried_election_name } }))
+         .to contain_exactly(@result_1, @result_4)
+
+       expected collection contained:  [#<ElectionResult id: 17, election_id: 24, party_id: 19, votes: 1, seats: 1, votes_percent_diff: 1.5,...09-21 07:30:07.466831000 +0000", updated_at: "2021-09-21 07:30:07.466831000 +0000", country_id: 42>]
+       actual collection contained:    [#<ElectionResult id: 5, election_id: 12, party_id: 9, votes: 1, seats: 1, votes_percent_diff: 1.5, s...09-21 07:30:07.466831000 +0000", updated_at: "2021-09-21 07:30:07.466831000 +0000", country_id: 42>]
+       the extra elements were:        [#<ElectionResult id: 5, election_id: 12, party_id: 9, votes: 1, seats: 1, votes_percent_diff: 1.5, s...09-21 07:30:07.449657000 +0000", updated_at: "2021-09-21 07:30:07.449657000 +0000", country_id: 41>]
+     # ./spec/models/election_result_spec.rb:44:in `block (3 levels) in <main>'
+
+  2) ElectionResult.of return election results with queried party name
+     Failure/Error:
+       expect(described_class.of({ party: { name: @queried_party_name } }))
+         .to contain_exactly(@result_1, @result_3)
+
+       expected collection contained:  [#<ElectionResult id: 17, election_id: 24, party_id: 19, votes: 1, seats: 1, votes_percent_diff: 1.5,...09-21 07:30:07.458124000 +0000", updated_at: "2021-09-21 07:30:07.458124000 +0000", country_id: 41>]
+       actual collection contained:    [#<ElectionResult id: 5, election_id: 12, party_id: 9, votes: 1, seats: 1, votes_percent_diff: 1.5, s...09-21 07:30:07.458124000 +0000", updated_at: "2021-09-21 07:30:07.458124000 +0000", country_id: 41>]
+       the extra elements were:        [#<ElectionResult id: 5, election_id: 12, party_id: 9, votes: 1, seats: 1, votes_percent_diff: 1.5, s...09-21 07:27:30.893435000 +0000", updated_at: "2021-09-21 07:27:30.893435000 +0000", country_id: 32>]
+     # ./spec/models/election_result_spec.rb:48:in `block (3 levels) in <main>'
+
+  3) ElectionResult.of return election results with queried country name
+     Failure/Error:
+       expect(described_class.of({ country: { name: @queried_country_name } }))
+         .to contain_exactly(@result_1, @result_2, @result_3)
+
+       expected collection contained:  [#<ElectionResult id: 17, election_id: 24, party_id: 19, votes: 1, seats: 1, votes_percent_diff: 1.5,...09-21 07:30:07.458124000 +0000", updated_at: "2021-09-21 07:30:07.458124000 +0000", country_id: 41>]
+       actual collection contained:    [#<ElectionResult id: 11, election_id: 18, party_id: 14, votes: 1, seats: 1, votes_percent_diff: 1.5,...09-21 07:30:07.458124000 +0000", updated_at: "2021-09-21 07:30:07.458124000 +0000", country_id: 41>]
+       the extra elements were:        [#<ElectionResult id: 11, election_id: 18, party_id: 14, votes: 1, seats: 1, votes_percent_diff: 1.5,...09-21 07:27:30.893435000 +0000", updated_at: "2021-09-21 07:27:30.893435000 +0000", country_id: 32>]
+     # ./spec/models/election_result_spec.rb:52:in `block (3 levels) in <main>'
+
+  4) ElectionResult.of return election results with queried country, election, party name
+     Failure/Error:
+       expect(described_class.of({
+                                   country: { name: @queried_country_name },
+                                   election: { name: @queried_election_name },
+                                   party: { name: @queried_party_name }
+                                 }))
+         .to contain_exactly(@result_1)
+
+       expected collection contained:  [#<ElectionResult id: 17, election_id: 24, party_id: 19, votes: 1, seats: 1, votes_percent_diff: 1.5,...09-21 07:30:07.442976000 +0000", updated_at: "2021-09-21 07:30:07.442976000 +0000", country_id: 41>]
+       actual collection contained:    [#<ElectionResult id: 11, election_id: 18, party_id: 14, votes: 1, seats: 1, votes_percent_diff: 1.5,...09-21 07:30:07.442976000 +0000", updated_at: "2021-09-21 07:30:07.442976000 +0000", country_id: 41>]
+       the extra elements were:        [#<ElectionResult id: 11, election_id: 18, party_id: 14, votes: 1, seats: 1, votes_percent_diff: 1.5,...09-21 07:27:30.877198000 +0000", updated_at: "2021-09-21 07:27:30.877198000 +0000", country_id: 32>]
+     # ./spec/models/election_result_spec.rb:56:in `block (3 levels) in <main>'
+
+Finished in 0.31451 seconds (files took 1.13 seconds to load)
+13 examples, 4 failures, 5 pending
+
+Failed examples:
+
+rspec ./spec/models/election_result_spec.rb:43 # ElectionResult.of return election results with queried election name
+rspec ./spec/models/election_result_spec.rb:47 # ElectionResult.of return election results with queried party name
+rspec ./spec/models/election_result_spec.rb:51 # ElectionResult.of return election results with queried country name
+rspec ./spec/models/election_result_spec.rb:55 # ElectionResult.of return election results with queried country, election, party name
+

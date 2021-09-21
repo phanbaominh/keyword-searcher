@@ -22,7 +22,7 @@ RSpec.describe ElectionResult, type: :model do
   end
 
   describe ".of" do
-    before(:context) do
+    before(:example) do
       @queried_election_name = "Query Election"
       @queried_party_name = "Query Party"
       @queried_country_name = "Query Country"
@@ -34,15 +34,15 @@ RSpec.describe ElectionResult, type: :model do
       party_1 = create(:party, country: country_1, name: @queried_party_name)
       party_2 = create(:party, country: country_1)
       party_3 = create(:party, country: country_2)
-      @result_1 = create(:election_result, party: party_1, election: election_1)
-      @result_2 = create(:election_result, party: party_2, election: election_1)
-      @result_3 = create(:election_result, party: party_1, election: election_2)
-      @result_4 = create(:election_result, party: party_3, election: election_3)
+      @result_1 = create(:election_result, party: party_1, election: election_1, country: country_1)
+      @result_2 = create(:election_result, party: party_2, election: election_1, country: country_1)
+      @result_3 = create(:election_result, party: party_1, election: election_2, country: country_1)
+      @result_4 = create(:election_result, party: party_3, election: election_3, country: country_2)
     end
     # { elections: {election:, result:}, parties: {party:, result:}}
     it "return election results with queried election name" do
       expect(described_class.of({ election: { name: @queried_election_name } }))
-        .to contain_exactly(@result_1, @result_4)
+        .to contain_exactly(@result_1, @result_2, @result_4)
     end
     it "return election results with queried party name" do
       expect(described_class.of({ party: { name: @queried_party_name } }))
