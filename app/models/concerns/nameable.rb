@@ -2,7 +2,7 @@
 
 module Nameable
   extend ActiveSupport::Concern
-  included do
-    scope :named, ->(name) { where(name: name) }
+  included do |base|
+    scope :named, ->(name) { where("#{base.table_name}.name LIKE ?", "%#{name}%") }
   end
 end
