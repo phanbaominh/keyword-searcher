@@ -2,12 +2,16 @@
   "name": "keyword-searcher",
   "private": true,
   "dependencies": {
+    "@hotwired/stimulus": "^3.0.0-beta.2",
     "@rails/actioncable": "^6.0.0",
     "@rails/activestorage": "^6.0.0",
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "5.4.0",
+    "chart.js": "^3.5.1",
+    "jquery": "^3.6.0",
     "postcss": "^8.2.10",
     "postcss-loader": "^4.0.3",
+    "select2": "^4.1.0-rc.0",
     "tailwindcss": "^2.2.14",
     "turbolinks": "^5.2.0",
     "webpack": "^4.46.0",
@@ -17,9 +21,23 @@
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^4.0.3",
     "autoprefixer": "^10.3.4",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.2",
+    "lint-staged": "^11.1.2",
+    "prettier": "2.4.1",
     "sass": "^1.39.0",
     "stylelint": "^13.13.1",
+    "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-standard": "^22.0.0",
     "webpack-dev-server": "^3.11.2"
+  },
+  "scripts": {
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.js": "eslint --fix",
+    "*.{js,css,scss}": "prettier --write --ignore-unknown"
   }
 }
