@@ -1,8 +1,17 @@
 # frozen_string_literal: true
 
 class ElectionResultsController < ApplicationController
-  def index
-    render json: { data: [{ name: "Labour Party", votes: 760_855, seats: 48, seats_diff: -1,
-                            votes_percent_diff: -1.0 }] }
+  def search
+    render json: ElectionResult.of(params).to_json(include: %i[election party country])
   end
+
+  def index
+    logger.info params
+  end
+
+  # private
+
+  # def search_params
+  #   params.permit(election: { name: {} }, country: { name: {} }, party: { name: {} })
+  # end
 end

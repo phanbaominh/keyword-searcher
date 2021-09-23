@@ -23,7 +23,7 @@ class ElectionResult < ApplicationRecord
 
     def chain_query(query, relation_name, relation, relation_option)
       if relation_option
-        query = query.joins(relation_name)
+        query = query.joins(relation_name).includes(relation_name)
         query = query.merge(relation.named(relation_option[:name])) if relation_option[:name]
       end
       query

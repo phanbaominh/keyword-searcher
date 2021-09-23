@@ -9,6 +9,9 @@ import * as ActiveStorage from '@rails/activestorage';
 import 'channels';
 import 'stylesheets/application.scss';
 import 'controllers';
+// eslint-disable-next-line no-unused-vars
+import $ from 'jquery';
+window.$ = $;
 Rails.start();
 Turbolinks.start();
 ActiveStorage.start();

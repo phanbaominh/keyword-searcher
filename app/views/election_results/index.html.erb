@@ -1,2 +1,11 @@
-<h1>ElectionResults#index</h1>
-<p>Find me in app/views/election_results/index.html.erb</p>
+<article class="query" data-controller="query">
+  <%= form_with url: search_election_results_path, method: :get, local: false, data: {action: "ajax:success->query#displayResult"} do |form| %>
+    <%= fields_for :election do |election_form| %>
+      <%= election_form.label :name, "Election:" %>
+      <%= election_form.text_field :name %>
+    <% end %>
+    <%= form.submit "Query" %>
+  <% end %>
+  <div class="query-result w-64 h-64" data-query-target="result">
+  </div>
+</article>

@@ -19,6 +19,7 @@
   },
   "version": "0.1.0",
   "devDependencies": {
+    "@babel/eslint-parser": "^7.15.7",
     "@fullhuman/postcss-purgecss": "^4.0.3",
     "autoprefixer": "^10.3.4",
     "eslint": "^7.32.0",
@@ -37,7 +38,10 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "*.js": ["eslint --fix", "prettier --write --ignore-unknown"],
+    "*.js": [
+      "eslint --fix",
+      "prettier --write --ignore-unknown"
+    ],
     "*.{css,scss}": "prettier --write --ignore-unknown"
   }
 }

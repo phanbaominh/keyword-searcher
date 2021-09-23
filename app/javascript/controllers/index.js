@@ -5,3 +5,6 @@ import { application } from './application';
 
 import HelloController from './hello_controller';
 application.register('hello', HelloController);
+
+import QueryController from './query_controller';
+application.register('query', QueryController);
