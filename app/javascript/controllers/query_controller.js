@@ -2,15 +2,19 @@ import { Controller } from '@hotwired/stimulus';
 import Chart from 'chart.js/auto';
 // let ei = 0;
 // function randomElection(name = `Election_${ei}`) {
-//   return { name, id: ei };
+//   return { name, id: ei, date: `200${ei++}-01-01` };
 // }
 // let pi = 0;
 // function randomP(name = `Party_${pi}`) {
 //   return { name, id: pi++ };
 // }
-
-// function randomER(votes = 1) {
-//   return { votes, election: randomElection(), party: randomP() };
+// let sp = randomP();
+// function randomER() {
+//   return {
+//     votes: Math.round(Math.random() * 10),
+//     election: randomElection(),
+//     party: sp,
+//   };
 // }
 // Connects to data-controller="query"
 export default class extends Controller {
@@ -23,68 +27,84 @@ export default class extends Controller {
     const elections = new Map();
     const parties = new Map();
     const queryResult = event.detail[0];
-    // const queryResult = [randomER(), randomER()];
+    // const queryResult = [randomER(), randomER(), randomER()];
     queryResult.forEach((electionResult) => {
       const election = electionResult.election;
       const party = electionResult.party;
       if (elections.has(election.id)) {
-        elections.get(election.id).result.push(electionResult);
+        elections.get(election.id).results.push(electionResult);
       } else {
-        elections.set(election.id, { ...election, result: [electionResult] });
+        elections.set(election.id, { ...election, results: [electionResult] });
       }
       if (parties.has(party.id)) {
-        parties.get(party.id).result.push(electionResult);
+        parties.get(party.id).results.push(electionResult);
       } else {
-        parties.set(party.id, { ...party, result: [electionResult] });
+        parties.set(party.id, { ...party, results: [electionResult] });
       }
     });
-    elections.forEach((election) => {
-      if (election.result.length > 1) {
-        const canvas = $('<canvas></canvas>');
+    console.log(parties);
+    this.#createElectionCharts(elections);
+    this.#createPartyCharts(parties);
+  }
 
+  #createPartyCharts(parties) {
+    parties.forEach((party) => {
+      if (party.results.length > 1) {
+        const canvas = $('<canvas></canvas>');
+        const results = party.results;
+        results.sort((a, b) => {
+          new Date(a.date).valueOf() - new Date(b.date).valueOf();
+        });
         $(this.resultTarget).append(canvas);
         const data = {
-          labels: election.result.map((result) => result.party.name),
+          labels: results.map((result) => result.election.name),
           datasets: [
             {
-              label: `${election.name} result`,
-              data: election.result.map((result) => result.votes),
-              // backgroundColor: [
-              //   'rgba(255, 99, 132, 0.2)',
-              //   'rgba(54, 162, 235, 0.2)',
-              //   'rgba(255, 206, 86, 0.2)',
-              //   'rgba(75, 192, 192, 0.2)',
-              //   'rgba(153, 102, 255, 0.2)',
-              //   'rgba(255, 159, 64, 0.2)',
-              // ],
-              // borderColor: [
-              //   'rgba(255, 99, 132, 1)',
-              //   'rgba(54, 162, 235, 1)',
-              //   'rgba(255, 206, 86, 1)',
-              //   'rgba(75, 192, 192, 1)',
-              //   'rgba(153, 102, 255, 1)',
-              //   'rgba(255, 159, 64, 1)',
-              // ],
+              label: `${party.name} result`,
+              data: results.map((result) => result.votes),
               borderWidth: 1,
             },
           ],
         };
 
-        console.log(data);
-        new Chart(canvas, {
-          type: 'bar',
-          data,
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-              y: {
-                beginAtZero: true,
-              },
-            },
-          },
-        });
+        this.#createChart(canvas, data, 'line');
       }
+    });
+  }
+  #createElectionCharts(elections) {
+    elections.forEach((election) => {
+      if (election.results.length > 1) {
+        const canvas = $('<canvas></canvas>');
+
+        $(this.resultTarget).append(canvas);
+        const data = {
+          labels: election.results.map((result) => result.party.name),
+          datasets: [
+            {
+              label: `${election.name} result`,
+              data: election.results.map((result) => result.votes),
+              borderWidth: 1,
+            },
+          ],
+        };
+
+        this.#createChart(canvas, data);
+      }
+    });
+  }
+  #createChart(canvas, data, type = 'bar') {
+    new Chart(canvas, {
+      type,
+      data,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
     });
   }
 }

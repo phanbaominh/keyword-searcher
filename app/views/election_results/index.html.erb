@@ -4,6 +4,10 @@
       <%= election_form.label :name, "Election:" %>
       <%= election_form.text_field :name %>
     <% end %>
+    <%= fields_for :party do |party_form| %>
+      <%= party_form.label :name, "Party:" %>
+      <%= party_form.text_field :name %>
+    <% end %>
     <%= form.submit "Query" %>
   <% end %>
   <div class="query-result w-64 h-64" data-query-target="result">
