@@ -22,44 +22,89 @@ RSpec.describe ElectionResult, type: :model do
   end
 
   describe ".of" do
-    before(:example) do
-      queried_election_name = "XQuery Election"
-      queried_party_name = "XQuery Party"
-      queried_country_name = "XQuery Country"
-      @queried_name = "Query"
-      country_1 = create(:country, name: queried_country_name)
-      country_2 = create(:country)
-      election_1 = create(:election, country: country_1, name: queried_election_name)
-      election_2 = create(:election, country: country_1)
-      election_3 = create(:election, country: country_2, name: queried_election_name)
-      party_1 = create(:party, country: country_1, name: queried_party_name)
-      party_2 = create(:party, country: country_1)
-      party_3 = create(:party, country: country_2)
-      @result_1 = create(:election_result, party: party_1, election: election_1, country: country_1)
-      @result_2 = create(:election_result, party: party_2, election: election_1, country: country_1)
-      @result_3 = create(:election_result, party: party_1, election: election_2, country: country_1)
-      @result_4 = create(:election_result, party: party_3, election: election_3, country: country_2)
+    before(:context) do
+      @queried_name = "query"
+      @queried_after = { day: "1", month: "1", year: "2010" }
+      @queried_before = { day: "1", month: "1", year: "2015" }
+      @matching_date = "2011-01-01"
+      @wrong_date_after = "2009-01-01"
+      @wrong_date_before = "2016-01-01"
+      @matching_name = "XX#{@queried_name}XX"
+      @matching_election = create(:election, name: @matching_name, date: @matching_date)
+      @matching_party = create(:party, name: @matching_name)
+      @matching_country = create(:country, name: @matching_name)
     end
-    # { elections: {election:, result:}, parties: {party:, result:}}
-    it "return election results with queried election name" do
-      expect(described_class.of({ election: { name: @queried_name } }))
-        .to contain_exactly(@result_1, @result_2, @result_4)
+
+    def create_result_with_matching_election_name
+      create(:election_result, election: @matching_election)
     end
-    it "return election results with queried party name" do
-      expect(described_class.of({ party: { name: @queried_name } }))
-        .to contain_exactly(@result_1, @result_3)
+
+    def create_result_with_matching_party_name
+      create(:election_result, party: @matching_party)
     end
-    it "return election results with queried country name" do
-      expect(described_class.of({ country: { name: @queried_name } }))
-        .to contain_exactly(@result_1, @result_2, @result_3)
+
+    def create_result_with_matching_country_name
+      create(:election_result, country: @matching_country)
     end
-    it "return election results with queried country, election, party name" do
+
+    def create_result_with_matching_date(wrong_date)
+      wrong_election = create(:election, date: wrong_date)
+      create(:election_result, election: wrong_election)
+      create(:election_result, election: @matching_election)
+    end
+
+    def create_matching_all_result
+      wrong_election_1 = create(:election, date: @matching_date)
+      wrong_election_2 = create(:election, name: @matching_name)
+      create(:election_result, election: wrong_election_1, country: @matching_country,
+                               party: @matching_party)
+      create(:election_result, election: wrong_election_2, country: @matching_country,
+                               party: @matching_party)
+      create(:election_result, election: @matching_election, party: create(:party, name: @matching_name))
+      create(:election_result, election: @matching_election, country: @matching_country)
+      create(:election_result, election: @matching_election, country: @matching_country,
+                               party: create(:party, name: @matching_name))
+    end
+    describe "with no date query" do
+      before(:example) do
+        create(:election_result)
+      end
+      it "return election results with queried election name" do
+        matching_result = create_result_with_matching_election_name
+        expect(described_class.of({ election: { name: @queried_name } }))
+          .to contain_exactly(matching_result)
+      end
+      it "return election results with queried party name" do
+        matching_result = create_result_with_matching_party_name
+        expect(described_class.of({ party: { name: @queried_name } }))
+          .to contain_exactly(matching_result)
+      end
+      it "return election results with queried country name" do
+        matching_result = create_result_with_matching_country_name
+        expect(described_class.of({ country: { name: @queried_name } }))
+          .to contain_exactly(matching_result)
+      end
+    end
+    it "return election results after a date" do
+      matching_result = create_result_with_matching_date(@wrong_date_after)
+      expect(described_class.of({ after: @queried_after }))
+        .to contain_exactly(matching_result)
+    end
+    it "return election results before a date" do
+      matching_result = create_result_with_matching_date(@wrong_date_before)
+      expect(described_class.of({ before: @queried_before }))
+        .to contain_exactly(matching_result)
+    end
+    it "return election results with queried country, election, party name and period" do
+      matching_result = create_matching_all_result
       expect(described_class.of({
                                   country: { name: @queried_name },
                                   election: { name: @queried_name },
-                                  party: { name: @queried_name }
+                                  party: { name: @queried_name },
+                                  after: @queried_after,
+                                  before: @queried_before
                                 }))
-        .to contain_exactly(@result_1)
+        .to contain_exactly(matching_result)
     end
   end
   # specify "A party should only have one result per election" do

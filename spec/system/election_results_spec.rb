@@ -22,4 +22,16 @@ RSpec.describe "Viewing election results", type: :system do
     #   expect(page).to have_text(result.party.name)
     # end
   end
+
+  scenario "Viewing result of a party" do
+    party = create(:party)
+    results = []
+    5.times { results << create(:election_result, party: party) }
+    visit '/'
+    within(".query") do
+      fill_in 'Party', with: party.name
+      click_button 'Query'
+    end
+    expect(page).to have_selector("canvas")
+  end
 end
