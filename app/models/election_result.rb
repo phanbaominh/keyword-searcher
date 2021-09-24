@@ -13,17 +13,27 @@ class ElectionResult < ApplicationRecord
   class << self
     def of(options)
       query = self
-      election, country, party = options.values_at(:election, :country, :party)
+      election, country, party, after, before = options.values_at(:election, :country, :party, :after, :before)
+      query.includes(:election, :country, :party) if election || country || party || after || before
       query = chain_query(query, :country, Country, country)
       query = chain_query(query, :election, Election, election)
+      if after || before
+        query = query.joins(:election) if election.nil?
+        query = query.where(elections: { date: get_date_string(after).. }) if after
+        query = query.where(elections: { date: ..get_date_string(before) }) if before
+      end
       chain_query(query, :party, Party, party)
     end
 
     private
 
+    def get_date_string(date_hash)
+      "#{date_hash[:year]}-#{date_hash[:month]}-#{date_hash[:day]}"
+    end
+
     def chain_query(query, relation_name, relation, relation_option)
       if relation_option
-        query = query.joins(relation_name).includes(relation_name)
+        query = query.joins(relation_name)
         query = query.merge(relation.named(relation_option[:name])) if relation_option[:name]
       end
       query
