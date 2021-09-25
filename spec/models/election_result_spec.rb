@@ -24,8 +24,8 @@ RSpec.describe ElectionResult, type: :model do
   describe ".of" do
     before(:context) do
       @queried_name = "query"
-      @queried_after = { day: "1", month: "1", year: "2010" }
-      @queried_before = { day: "1", month: "1", year: "2015" }
+      @queried_after = "2010-01-01"
+      @queried_before = "2015-01-01"
       @matching_date = "2011-01-01"
       @wrong_date_after = "2009-01-01"
       @wrong_date_before = "2016-01-01"
@@ -69,17 +69,17 @@ RSpec.describe ElectionResult, type: :model do
       before(:example) do
         create(:election_result)
       end
-      it "return election results with queried election name" do
+      it "return election results with matching election name" do
         matching_result = create_result_with_matching_election_name
         expect(described_class.of({ election: { name: @queried_name } }))
           .to contain_exactly(matching_result)
       end
-      it "return election results with queried party name" do
+      it "return election results with matching party name" do
         matching_result = create_result_with_matching_party_name
         expect(described_class.of({ party: { name: @queried_name } }))
           .to contain_exactly(matching_result)
       end
-      it "return election results with queried country name" do
+      it "return election results with matching country name" do
         matching_result = create_result_with_matching_country_name
         expect(described_class.of({ country: { name: @queried_name } }))
           .to contain_exactly(matching_result)
@@ -95,7 +95,7 @@ RSpec.describe ElectionResult, type: :model do
       expect(described_class.of({ before: @queried_before }))
         .to contain_exactly(matching_result)
     end
-    it "return election results with queried country, election, party name and period" do
+    it "return election results with matching country, election, party name and period" do
       matching_result = create_matching_all_result
       expect(described_class.of({
                                   country: { name: @queried_name },

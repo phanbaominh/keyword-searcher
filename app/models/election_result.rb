@@ -17,10 +17,10 @@ class ElectionResult < ApplicationRecord
       query.includes(:election, :country, :party) if election || country || party || after || before
       query = chain_query(query, :country, Country, country)
       query = chain_query(query, :election, Election, election)
-      if after || before
+      if after.present? || before.present?
         query = query.joins(:election) if election.nil?
-        query = query.where(elections: { date: get_date_string(after).. }) if after
-        query = query.where(elections: { date: ..get_date_string(before) }) if before
+        query = query.where(elections: { date: after.. }) if after.present?
+        query = query.where(elections: { date: ..before }) if before.present?
       end
       chain_query(query, :party, Party, party)
     end

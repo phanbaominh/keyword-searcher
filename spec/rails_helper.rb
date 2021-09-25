@@ -34,6 +34,16 @@ rescue ActiveRecord::PendingMigrationError => e
   puts e.to_s.strip
   exit 1
 end
+
+Capybara.default_driver = :rack_test
+Capybara.register_driver :logging_selenium_chrome do |app|
+  caps = Selenium::WebDriver::Remote::Capabilities.chrome(loggingPrefs: { browser: 'ALL' })
+  browser_options = ::Selenium::WebDriver::Chrome::Options.new
+  # browser_options.args << '--some_option' # add whatever browser args and other options you need (--headless, etc)
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options, desired_capabilities: caps)
+end
+Capybara.javascript_driver = :logging_selenium_chrome
+
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"

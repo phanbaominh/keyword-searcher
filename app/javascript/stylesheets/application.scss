@@ -2,6 +2,14 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-.btn {
-  @apply px-4 py-2 bg-blue-600 text-white rounded;
+.query {
+  .query__form > div {
+    @apply mb-2;
+    label {
+      @apply block;
+    }
+    input[type='text'] {
+      @apply border border-gray-600 rounded-md w-full py-1;
+    }
+  }
 }

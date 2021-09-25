@@ -3,12 +3,13 @@
 require 'rails_helper'
 
 RSpec.describe "ElectionResults", type: :request do
-  describe "GET /search" do
-    it "returns result of an election" do
+  describe "#search" do
+    it "returns election results" do
       election = create(:election)
       3.times { create(:election_result, election: election) }
       2.times { create(:election_result) }
       query_data = { election: { name: election.name } }
+      # Maybe mock controller action here?
       get "/election_results/search?#{query_data.to_query}"
       expect(response).to have_http_status(:success)
       expect(response.content_type).to include("json")

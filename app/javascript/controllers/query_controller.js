@@ -9,10 +9,11 @@ import Chart from 'chart.js/auto';
 //   return { name, id: pi++ };
 // }
 // let sp = randomP();
+// let se = randomElection();
 // function randomER() {
 //   return {
 //     votes: Math.round(Math.random() * 10),
-//     election: randomElection(),
+//     election: se, //randomElection(),
 //     party: sp,
 //   };
 // }
@@ -42,7 +43,6 @@ export default class extends Controller {
         parties.set(party.id, { ...party, results: [electionResult] });
       }
     });
-    console.log(parties);
     this.#createElectionCharts(elections);
     this.#createPartyCharts(parties);
   }

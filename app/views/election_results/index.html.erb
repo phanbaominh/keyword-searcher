@@ -1,15 +1,42 @@
-<article class="query" data-controller="query">
-  <%= form_with url: search_election_results_path, method: :get, local: false, data: {action: "ajax:success->query#displayResult"} do |form| %>
-    <%= fields_for :election do |election_form| %>
-      <%= election_form.label :name, "Election:" %>
-      <%= election_form.text_field :name %>
-    <% end %>
-    <%= fields_for :party do |party_form| %>
-      <%= party_form.label :name, "Party:" %>
-      <%= party_form.text_field :name %>
-    <% end %>
-    <%= form.submit "Query" %>
+<% content_for :head do %>
+  <title>Querying election results</title>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@duetds/date-picker@1.4.0/dist/duet/duet.esm.js"></script>
+  <script nomodule src="https://cdn.jsdelivr.net/npm/@duetds/date-picker@1.4.0/dist/duet/duet.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@duetds/date-picker@1.4.0/dist/duet/themes/default.css" />
+<% end %>
+<article class="query flex flex-col items-center " data-controller="query">
+  <h1>Query: </h1>
+  <%= form_with url: search_election_results_path, method: :get, local: false, 
+      data: {action: "ajax:success->query#displayResult"},
+      class: "query__form flex flex-col p-4 border rounded-md border-gray-600" do |form| %>
+    <div>
+      <%= fields_for :election do |election_form| %>
+        <%= election_form.label :name, "Election:" %>
+        <%= election_form.text_field :name %>
+      <% end %>
+    </div>
+    <div>
+      <%= fields_for :party do |party_form| %>
+        <%= party_form.label :name, "Party:" %>
+        <%= party_form.text_field :name %>
+      <% end %>
+    </div>
+    <div>
+      <%= fields_for :country do |country_form| %>
+        <%= country_form.label :name, "Country:" %>
+        <%= country_form.text_field :name %>
+      <% end %>
+    </div>
+    <div>
+      <%= form.label :before, "Before: " %>
+      <duet-date-picker identifier="before" name="before"></duet-date-picker>
+    </div>
+    <div >
+      <%= form.label :after, "After: " %>
+      <duet-date-picker identifier="after" name="after"></duet-date-picker>
+    </div>
+    <%= form.submit "Query", class: "self-end " %>
   <% end %>
-  <div class="query-result w-64 h-64" data-query-target="result">
+  <div class="query__result w-64 h-64" data-query-target="result">
   </div>
 </article>
